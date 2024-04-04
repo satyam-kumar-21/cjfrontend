@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCourseToUserAction } from "../../store/Action/actionUser";
 
 function CourseCard({ id, title, image, price, discountedPrice, duration }) {
+
+  const backendurl = "https://cjbackend-3.onrender.com"
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -17,7 +19,7 @@ function CourseCard({ id, title, image, price, discountedPrice, duration }) {
 
   const handlePayment = async () => {
     try {
-      const orderUrl = "http://localhost:5050/api/payment/orders";
+      const orderUrl = `${backendurl}/api/payment/orders`;
       const { data } = await axios.post(orderUrl, {
         amount: discountedPrice || price,
       });
@@ -38,7 +40,7 @@ function CourseCard({ id, title, image, price, discountedPrice, duration }) {
       order_id: data.id,
       handler: async (response) => {
         try {
-          const verifyUrl = "http://localhost:5050/api/payment/verify";
+          const verifyUrl = `${backendurl}/api/payment/verify`;
           await axios.post(verifyUrl, response);
           const data1 = await dispatch(addCourseToUserAction(userId, id));
           console.log("Data is :", data1);
